@@ -39,7 +39,7 @@ public class WeatherReport {
 				dir.mkdir();
 
 				String path_to_store = directory_name + regions[i] + "\\" + regions[i]+"_"+params[j]+".txt";
-				System.out.println(url);
+//				System.out.println(url);
 
 				try {
 					download(url,path_to_store);		
@@ -78,6 +78,7 @@ public class WeatherReport {
 		String output_path = directory_name + "Output" + "\\" +"output.csv";
 		try {
 			file_writer = new FileWriter(output_path);
+			initial_setup_csv();
 			parse_text_to_csv();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -85,6 +86,17 @@ public class WeatherReport {
 
 	}
 
+	public static void initial_setup_csv() throws IOException{
+
+		file_writer.append("region").append(",");
+		file_writer.append("weather").append(",");
+		file_writer.append("year").append(",");
+		file_writer.append("keys").append(",");
+		file_writer.append("values").append(",");
+		file_writer.append(System.getProperty("line.separator"));
+	}
+
+	//This function opens the downloaded text files one by one and parse the text files into .csv file format.
 	public static void parse_text_to_csv() throws IOException{
 		for(String region : regions){
 
@@ -94,16 +106,21 @@ public class WeatherReport {
 
 				try {
 					BufferedReader reader = new BufferedReader(new FileReader(file_path_to_parse));
+
 					int line_count = 1;
 					while((line = reader.readLine()) != null){
+
+						//This condition parses the name of the Months in a year and store them in keys[] array
 						if(line_count == 8){
 							storeKeys(line);
 						}
+						//This will parse the remaining text file and append the data into the .csv file format.
 						else if(line_count > 8){
 							parseRemainingLines(line,region,param);
 						}
 						line_count++;
 					}
+
 					reader.close();
 
 				} catch (FileNotFoundException e) {
@@ -115,6 +132,8 @@ public class WeatherReport {
 		}
 	}
 
+	//This function will accept the line as a parameter and split the line around white spaces and store the
+	//values in the String[] array. 
 	public static void storeKeys(String line){
 		keys = line.split("\\s{1,5}");
 	}
@@ -141,6 +160,7 @@ public class WeatherReport {
 		}
 	}
 
+	//This function will close the Opened file.
 	private static void closing_files() {
 		// TODO Auto-generated method stub
 
@@ -158,7 +178,6 @@ public class WeatherReport {
 		Download_Weather_Report_Files();
 		Write_To_CSV_File();
 		closing_files();
-
 	}
 
 
