@@ -39,7 +39,7 @@ public class WeatherReport {
 				dir.mkdir();
 
 				String path_to_store = directory_name + regions[i] + "\\" + regions[i]+"_"+params[j]+".txt";
-//				System.out.println(url);
+				//				System.out.println(url);
 
 				try {
 					download(url,path_to_store);		
@@ -58,7 +58,7 @@ public class WeatherReport {
 
 		}
 		Path path = Paths.get(path_to_store);
-		System.out.println(path);
+//		System.out.println(path);
 
 		URI uri = URI.create(url);
 		try (InputStream in = uri.toURL().openStream()) {
@@ -143,19 +143,18 @@ public class WeatherReport {
 		String[] values = line.split("\\s{1,6}");
 		String year = values[0];
 		for (int i = 1; i < values.length; i++) {
-			if (" ---  ".equals(values[i]) ||  "".equals(values[i])) {
+			if ("---".equals(values[i]) ||  "".equals(values[i])) {
 				values[i] = NOT_AVAILABLE;
-			}else{
-				try {
-					file_writer.append(region).append(",");
-					file_writer.append(param).append(",");
-					file_writer.append(year).append(",");
-					file_writer.append(keys[i]).append(",");
-					file_writer.append(values[i]).append(",");
-					file_writer.append(System.getProperty("line.separator"));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+			}
+			try {
+				file_writer.append(region).append(",");
+				file_writer.append(param).append(",");
+				file_writer.append(year).append(",");
+				file_writer.append(keys[i]).append(",");
+				file_writer.append(values[i]).append(",");
+				file_writer.append(System.getProperty("line.separator"));
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 	}
